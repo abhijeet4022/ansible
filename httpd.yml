@@ -1,0 +1,44 @@
+---
+        - name: Configuring Httpd with installation
+          hosts: server[0]
+          user: root
+          become: yes
+          connection: ssh
+          tasks:
+                - name: Installing httpd
+                  yum:
+                       name: httpd
+                       state: present
+
+                - name: Restarting Httpd
+                  service: 
+                       name: httpd
+                       state: restarted
+
+                - name: Enabling httpd
+                  service:
+                       name: httpd
+                       state: started 
+
+                - name: Copying index.html file
+                  copy: src=/root/index.html dest=/var/www/html/index.html
+               
+                - name: install firewalld
+                  firewalld:
+                        zone: public
+                        service: http
+                        permanent: yes
+                        state: enabled
+
+                - name: Reload firewalld service
+                  service:
+                        name: firewalld
+                        state: restarted
+
+                - name: Restarting httpd
+                  service:
+                        name: httpd
+                        state: restarted
+                        
+...
+

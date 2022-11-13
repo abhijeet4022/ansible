@@ -1,0 +1,20 @@
+---
+        - name: Adding firewall
+          hosts: server
+          user: root
+          become: yes
+          connection: ssh
+          tasks:
+                - name: install firewalld
+                  firewalld:
+                        zone: public
+                        service: https
+                        permanent: yes
+                        state: enabled
+                - name: Reload firewalld service
+                  service:
+                        name: firewalld
+                        state: restarted
+                        
+...
+
